@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import team.aliens.dmscron.thirdparty.api.error.FeignClientErrorDecoder
 
-@EnableFeignClients(basePackages = ["team.aliens.dmscron"])
+@EnableFeignClients(basePackages = ["team.aliens.dmscron.thirdparty.api"])
 @Configuration
 class FeignClientConfiguration {
 
