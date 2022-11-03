@@ -1,7 +1,5 @@
 package team.aliens.dmscron.global.error
 
-import org.hibernate.exception.ConstraintViolationException
-import org.springframework.boot.context.properties.bind.BindResult
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import team.aliens.dmscron.global.exception.DmsCronException
