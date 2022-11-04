@@ -36,7 +36,7 @@ class ExceptionFilter(
     }
 
     private fun errorToJson(errorProperty: ErrorProperty, response: HttpServletResponse) {
-        response.status = errorProperty.status()
+        response.status = errorProperty.status().value()
         response.characterEncoding = StandardCharsets.UTF_8.name()
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         response.writer.write(objectMapper.writeValueAsString(ErrorResponse.of(errorProperty)))

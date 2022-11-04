@@ -7,7 +7,7 @@ data class ErrorResponse(
 
     companion object {
         fun of(errorProperty: ErrorProperty) = ErrorResponse(
-            status = errorProperty.status(),
+            status = errorProperty.status().value(),
             message = errorProperty.message()
         )
     }
