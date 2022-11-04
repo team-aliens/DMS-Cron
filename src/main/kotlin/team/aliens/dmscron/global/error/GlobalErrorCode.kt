@@ -5,6 +5,7 @@ enum class GlobalErrorCode(
     private val message: String
 ) : ErrorProperty {
 
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error")
     ;
 
     override fun status(): Int = status
