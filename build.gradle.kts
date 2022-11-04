@@ -22,6 +22,7 @@ dependencies {
     implementation(Dependencies.KOTLIN_JDK)
     implementation(Dependencies.OPEN_FEIGN)
     runtimeOnly(Dependencies.MYSQL_CONNECTOR)
+    implementation(Dependencies.GSON)
     testImplementation(Dependencies.SPRING_TEST)
 }
 
