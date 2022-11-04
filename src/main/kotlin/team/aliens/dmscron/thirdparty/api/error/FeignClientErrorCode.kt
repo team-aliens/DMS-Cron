@@ -8,8 +8,11 @@ enum class FeignClientErrorCode(
 ) : ErrorProperty {
 
     OTHER_SERVER_BAD_REQUEST(400, "Other Server Bad Request"),
+
     OTHER_SERVER_UN_AUTHORIZED(401, "Other Server Un Authorized"),
+
     OTHER_SERVER_FORBIDDEN(403, "Other Server Forbidden"),
+    
     OTHER_SERVER_EXPIRED_TOKEN(419, "Other Server Expired Token")
     ;
 
