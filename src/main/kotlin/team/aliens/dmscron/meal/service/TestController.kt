@@ -43,25 +43,23 @@ class TestController(
 
         val c = a.mealServiceDietInfo[0].head[0].list_total_count - 1
 
+        val mealP: MutableList<ProcessNeisMeal.ProcessNeisMealDetails> = mutableListOf()
 
-        val calInfo = a.mealServiceDietInfo[1].row[0].CAL_INFO
-        val menu = a.mealServiceDietInfo[1].row[0].DDISH_NM
-        val mealDate = a.mealServiceDietInfo[1].row[0].MLSV_YMD
-        val mealCode = a.mealServiceDietInfo[1].row[0].MMEAL_SC_CODE
-        val schoolName = a.mealServiceDietInfo[1].row[0].SCHUL_NM
-
-        /*
         for (i: Int in 0 until c) {
             val calInfo = a.mealServiceDietInfo[1].row[i].CAL_INFO
             val menu = a.mealServiceDietInfo[1].row[i].DDISH_NM
+                .replace("<br/>", "||")
+                .replace("/", "&")
+                .replace("[0-9.()]".toRegex(), "")
+                .replace("\\p{Z}".toRegex(), "")
             val mealDate = a.mealServiceDietInfo[1].row[i].MLSV_YMD
             val mealCode = a.mealServiceDietInfo[1].row[i].MMEAL_SC_CODE
             val schoolName = a.mealServiceDietInfo[1].row[i].SCHUL_NM
-        }*/
 
-        return ProcessNeisMeal(
-            meals = listOf(ProcessNeisMeal.ProcessNeisMealDetails(calInfo, menu, mealCode, schoolName, mealDate))
-        )
+            mealP.add(i, ProcessNeisMeal.ProcessNeisMealDetails(calInfo, menu, mealDate, mealCode, schoolName))
+        }
+
+        return ProcessNeisMeal(mealP)
     }
 
 }

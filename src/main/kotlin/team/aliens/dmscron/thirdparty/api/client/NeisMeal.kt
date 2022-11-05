@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @FeignClient(name = "neis-meal", url = "https://open.neis.go.kr/hub")
-interface NeisMealApi {
+interface NeisMeal {
 
     @GetMapping("/mealServiceDietInfo")
     fun getNeisMeal(
