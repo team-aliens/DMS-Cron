@@ -21,7 +21,7 @@ import team.aliens.dmscron.meal.model.dto.MealResponse.MealDetails
 @RestController
 class TestController(
 
-    @Value("\${open-feign.key}")
+    @Value("\${open-feign.neis-key}")
     private val KEY: String,
 
     private val neisMeal: NeisMeal
@@ -61,9 +61,9 @@ class TestController(
                 element = MealDetails(
                     calInfo = calInfo,
                     menu = menu,
-                    mealDate = mealDate,
                     mealCode = mealCode,
-                    schoolName = schoolName
+                    schoolName = schoolName,
+                    mealDate = mealDate
                 )
             )
         }
