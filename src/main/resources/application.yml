@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
   shutdown: graceful
 
 spring:
@@ -24,6 +24,9 @@ spring:
 
   jackson:
     property-naming-strategy: SNAKE_CASE
+
+open-feign:
+  neis-key: ${NEIS_KEY}
 
 logging:
   level:
