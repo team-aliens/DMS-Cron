@@ -9,13 +9,13 @@ interface NeisMeal {
 
     @GetMapping("/mealServiceDietInfo")
     fun getNeisMeal(
-        @RequestParam(name = "KEY") key: String,
-        @RequestParam(name = "Type") type: String,
-        @RequestParam(name = "pIndex") pageIndex: Int,
-        @RequestParam(name = "pSize") pageSize: Int,
-        @RequestParam(name = "ATPT_OFCDC_SC_CODE") sdSchoolCode: String,
-        @RequestParam(name = "SD_SCHUL_CODE") schoolCode: String,
-        @RequestParam(name = "MLSV_FROM_YMD") startedYmd: String,
-        @RequestParam(name = "MLSV_TO_YMD") endedYmd: String
+        @RequestParam(name = NeisMealParamProperty.KEY) key: String,
+        @RequestParam(name = NeisMealParamProperty.TYPE) type: String,
+        @RequestParam(name = NeisMealParamProperty.PAGE_INDEX) pageIndex: Int,
+        @RequestParam(name = NeisMealParamProperty.PAGE_SIZE) pageSize: Int,
+        @RequestParam(name = NeisMealParamProperty.SCHOOL_CODE) sdSchoolCode: String,
+        @RequestParam(name = NeisMealParamProperty.SD_SCHOOL_CODE) schoolCode: String,
+        @RequestParam(name = NeisMealParamProperty.STARTED_YMD) startedYmd: String,
+        @RequestParam(name = NeisMealParamProperty.ENDED_YMD) endedYmd: String
     ): String
 }
