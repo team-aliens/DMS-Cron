@@ -2,7 +2,7 @@ package team.aliens.dmscron.meal.service
 
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import team.aliens.dmscron.meal.service.dto.ProcessedMealResponse
 import team.aliens.dmscron.thirdparty.api.FeignClientProperty
 import team.aliens.dmscron.thirdparty.api.client.NeisMeal
@@ -10,7 +10,15 @@ import team.aliens.dmscron.thirdparty.api.client.dto.NeisMealResponse
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-@Component
+/**
+ *
+ * Neis API 에서 호출한 HTML 형식의 JSON 을 Gson 을 사용하여 오브젝트로 변환하고 DB 형식에 맞게 데이터를 가공하는 Service
+ *
+ * @author leejeongyoon
+ * @date 2022/11/07
+ * @version 1.0.0
+ **/
+@Service
 class ProcessingNeisMealsService(
 
     @Value("\${open-feign.neis-key}")
