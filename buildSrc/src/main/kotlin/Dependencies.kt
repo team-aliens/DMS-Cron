@@ -8,9 +8,6 @@ object Dependencies {
     // web
     const val SPRING_WEB = "org.springframework.boot:spring-boot-starter-web"
 
-    // transaction
-    const val SPRING_TRANSACTION = "org.springframework:spring-tx:${DependencyVersions.SPRING_TRANSACTION}"
-
     // database
     const val SPRING_DATA_JPA = "org.springframework.boot:spring-boot-starter-data-jpa"
     const val MYSQL_CONNECTOR = "mysql:mysql-connector-java"
