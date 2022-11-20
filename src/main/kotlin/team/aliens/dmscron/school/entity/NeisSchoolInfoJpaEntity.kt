@@ -25,7 +25,7 @@ class NeisSchoolInfoJpaEntity(
     @Column(columnDefinition = "CHAR(7)", nullable = false, unique = true)
     val sdSchoolCode: Char,
 
-    @Column(columnDefinition = "CHAR(3)", nullable = false, unique = true)
+    @Column(columnDefinition = "CHAR(3)", nullable = false)
     val schoolCode: Char
 
 )
