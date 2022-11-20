@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dmscron.thirdparty.api.FeignClientProperty
 import team.aliens.dmscron.thirdparty.api.client.NeisMeal
 import team.aliens.dmscron.thirdparty.api.client.dto.NeisMealResponse
-import team.aliens.dmscron.meal.model.dto.MealResponse
-import team.aliens.dmscron.meal.model.dto.MealResponse.MealDetails
+import team.aliens.dmscron.meal.dto.MealResponse
+import team.aliens.dmscron.meal.dto.MealResponse.MealElement
 
 /**
  *
@@ -43,7 +43,7 @@ class TestController(
 
         val neisMealTotalCount = neisMealResponse.mealServiceDietInfo[0].head[0].list_total_count - 1
 
-        val meals: MutableList<MealDetails> = mutableListOf()
+        val meals: MutableList<MealElement> = mutableListOf()
 
         for (i: Int in 0 until neisMealTotalCount) {
             val calInfo = neisMealResponse.mealServiceDietInfo[1].row[i].CAL_INFO
@@ -58,7 +58,7 @@ class TestController(
 
             meals.add(
                 index = i,
-                element = MealDetails(
+                element = MealElement(
                     calInfo = calInfo,
                     menu = menu,
                     mealCode = mealCode,
