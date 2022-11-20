@@ -22,10 +22,10 @@ class NeisSchoolInfoJpaEntity(
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     val school: SchoolJpaEntity,
 
-    @Column(columnDefinition = "CHAR(3)", nullable = false)
+    @Column(columnDefinition = "CHAR(3)", nullable = false, unique = true)
     val sdSchoolCode: Char,
 
-    @Column(columnDefinition = "CHAR(7)", nullable = false)
+    @Column(columnDefinition = "CHAR(7)", nullable = false, unique = true)
     val schoolCode: Char
 
 )
