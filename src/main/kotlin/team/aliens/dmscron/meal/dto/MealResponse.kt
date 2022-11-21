@@ -1,9 +1,9 @@
-package team.aliens.dmscron.meal.model.dto
+package team.aliens.dmscron.meal.dto
 
 data class MealResponse(
-    val meals: List<MealDetails>
+    val meals: List<MealElement>
 ) {
-    data class MealDetails(
+    data class MealElement(
         val calInfo: String,
         val menu: String,
         val mealCode: String,
