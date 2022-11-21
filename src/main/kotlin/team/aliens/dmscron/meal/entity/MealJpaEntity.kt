@@ -1,6 +1,5 @@
 package team.aliens.dmscron.meal.entity
 
-import team.aliens.dmscron.school.entity.SchoolJpaEntity
 import java.io.Serializable
 import java.time.LocalDate
 import java.util.UUID
@@ -13,6 +12,7 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.MapsId
 import javax.persistence.Table
+import team.aliens.dmscron.school.entity.SchoolJpaEntity
 
 @Entity
 @Table(name = "tbl_meal")

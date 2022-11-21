@@ -6,16 +6,21 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Table
+import javax.persistence.UniqueConstraint
 
 @Entity
-@Table(name = "tbl_school")
+@Table(name = "tbl_school",
+    uniqueConstraints = [
+        UniqueConstraint(columnNames = arrayOf("name", "address"))
+    ]
+)
 class SchoolJpaEntity(
 
     @Id
     @Column(columnDefinition = "BINARY(16)")
     val id: UUID,
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false, unique = true)
+    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val name: String,
 
     @Column(columnDefinition = "CHAR(8)", nullable = false, unique = true)

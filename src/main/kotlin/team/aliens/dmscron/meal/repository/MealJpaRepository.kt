@@ -6,5 +6,5 @@ import team.aliens.dmscron.meal.entity.MealJpaEntity
 import team.aliens.dmscron.meal.entity.MealJpaEntityId
 
 @Repository
-interface MealJpaRepository : CrudRepository<MealJpaEntity, MealJpaEntityId>{
+interface MealJpaRepository : CrudRepository<MealJpaEntity, MealJpaEntityId> {
 }
