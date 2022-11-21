@@ -1,55 +1,48 @@
 package team.aliens.dmscron.scheduler
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import team.aliens.dmscron.meal.entity.MealJpaEntity
 import team.aliens.dmscron.meal.entity.MealJpaEntityId
 import team.aliens.dmscron.meal.repository.MealJpaRepository
-import team.aliens.dmscron.school.entity.SchoolJpaEntity
-import team.aliens.dmscron.meal.service.ProcessingNeisMealsService
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.UUID
+import team.aliens.dmscron.meal.service.NeisMealsService
+import team.aliens.dmscron.school.repository.SchoolJpaRepository
+import team.aliens.dmscron.school.service.NeisSchoolInfoService
 
 @Component
 class MealScheduler(
     private val mealRepository: MealJpaRepository,
-    private val processingNeisMealsService: ProcessingNeisMealsService
+    private val schoolRepository: SchoolJpaRepository,
+    private val neisMealsService: NeisMealsService,
+    private val neisSchoolInfoService: NeisSchoolInfoService
 ) {
 
     /**
-     * 매달 1일 00시에 실행합니다
+     * 매달 20일 00시에 실행합니다
      **/
-    @Scheduled(cron = "0 0 0 1 * *")
-    fun saveMeal() {
-        // test school uuid
-        val schoolId = UUID.fromString("30373832-6566-3438-2d61-3433392d3131")
-
-        val passer = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val contractStartedAtToDate = LocalDate.parse("2020-04-11", passer)
-
-        val mealJpaEntities = processingNeisMealsService.execute().map {
-            MealJpaEntity(
-                id = MealJpaEntityId(
-                    mealDate = it.mealDate,
-                    schoolId = schoolId
-                ),
-                school = SchoolJpaEntity(
-                    id = schoolId,
-                    name = "대덕소프트웨어마이스터고등학교",
-                    code = "12345678",
-                    question = "질문입니다",
-                    answer = "답변입니다",
-                    address = "주소는 ~~",
-                    contractStartedAt = contractStartedAtToDate,
-                    contractEndedAt = null
-                ),
-                breakfast = it.breakfast,
-                lunch = it.lunch,
-                dinner = it.dinner
-            )
+    @Transactional
+    @Scheduled(cron = "0 0 0 20 * *")
+    fun saveMeals() {
+        val meals = schoolRepository.findAll().flatMap { school ->
+            neisMealsService.execute(
+                sdSchoolCode = neisSchoolInfoService.execute(schoolName = school.name, schoolAddress = school.address).sdSchoolCode,
+                regionCode = neisSchoolInfoService.execute(schoolName = school.name, schoolAddress = school.address).regionCode
+            ).map { meal ->
+                MealJpaEntity(
+                    id = MealJpaEntityId(
+                        mealDate = meal.mealDate,
+                        schoolId = school.id,
+                    ),
+                    school = schoolRepository.findByIdOrNull(school.id)!!,
+                    breakfast = meal.breakfast,
+                    lunch = meal.lunch,
+                    dinner= meal.dinner
+                )
+            }
         }
 
-        mealRepository.saveAll(mealJpaEntities)
+        mealRepository.saveAll(meals)
     }
 }
