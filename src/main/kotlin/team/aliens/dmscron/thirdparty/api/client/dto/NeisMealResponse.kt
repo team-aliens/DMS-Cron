@@ -5,21 +5,21 @@ data class NeisMealResponse(
 )
 
 data class MealServiceDietInfo(
-    val head: List<Head>,
-    val row: List<Row>
+    val head: List<NeisMealHead>,
+    val row: List<NeisMealRow>
 )
 
-data class Head(
-    val RESULT: RESULT,
+data class NeisMealHead(
+    val RESULT: NeisMealRESULT,
     val list_total_count: Int
 )
 
-data class RESULT(
+data class NeisMealRESULT(
     val CODE: String,
     val MESSAGE: String
 )
 
-data class Row(
+data class NeisMealRow(
     val CAL_INFO: String,
     val DDISH_NM: String,
     val MLSV_YMD: String,
