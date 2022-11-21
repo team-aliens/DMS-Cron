@@ -91,8 +91,8 @@ class NeisMealsService(
     private fun localDateToString(localDate: String): String {
         val sb = StringBuffer()
         sb.append(localDate)
-        sb.deleteCharAt(5)
-        sb.deleteCharAt(7)
+        sb.deleteCharAt(4)
+        sb.deleteCharAt(6)
 
         return sb.toString()
     }
