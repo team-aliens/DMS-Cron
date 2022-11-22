@@ -88,6 +88,9 @@ class NeisMealsService(
         return processedMealResponse
     }
 
+    /**
+     * yyyy-MM-dd 을 yyyMMdd 로 변경
+     */
     private fun localDateToString(localDate: String): String {
         val sb = StringBuffer()
         sb.append(localDate)
