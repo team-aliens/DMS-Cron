@@ -8,6 +8,7 @@ import team.aliens.dmscron.meal.entity.MealJpaEntity
 import team.aliens.dmscron.meal.entity.MealJpaEntityId
 import team.aliens.dmscron.meal.repository.MealJpaRepository
 import team.aliens.dmscron.meal.service.NeisMealsService
+import team.aliens.dmscron.school.entity.SchoolJpaEntity
 import team.aliens.dmscron.school.repository.SchoolJpaRepository
 import team.aliens.dmscron.school.service.NeisSchoolInfoService
 
@@ -31,8 +32,8 @@ class MealScheduler(
          */
         val meals = schoolRepository.findAll().flatMap { school ->
             neisMealsService.execute(
-                sdSchoolCode = neisSchoolInfoService.execute(schoolName = school.name, schoolAddress = school.address).sdSchoolCode,
-                regionCode = neisSchoolInfoService.execute(schoolName = school.name, schoolAddress = school.address).regionCode
+                sdSchoolCode = getNeisSchoolInfo(school).sdSchoolCode,
+                regionCode = getNeisSchoolInfo(school).regionCode
             ).map { meal ->
                 MealJpaEntity(
                     id = MealJpaEntityId(
@@ -49,4 +50,7 @@ class MealScheduler(
 
         mealRepository.saveAll(meals)
     }
+    
+    private fun getNeisSchoolInfo(school: SchoolJpaEntity) =
+        neisSchoolInfoService.execute(schoolName = school.name, schoolAddress = school.address)
 }
