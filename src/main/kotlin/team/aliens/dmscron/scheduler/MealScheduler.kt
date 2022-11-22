@@ -21,10 +21,14 @@ class MealScheduler(
 
     /**
      * 매달 20일 00시에 실행합니다
-     **/
+     */
     @Transactional
     @Scheduled(cron = "0 0 0 20 * *")
     fun saveMeals() {
+
+        /**
+         * school table 에서 조회한 name, address 로 Neis 학교 정보를 가져오고, 가져온 학교 정보로 급식을 가져옵니다
+         */
         val meals = schoolRepository.findAll().flatMap { school ->
             neisMealsService.execute(
                 sdSchoolCode = neisSchoolInfoService.execute(schoolName = school.name, schoolAddress = school.address).sdSchoolCode,
