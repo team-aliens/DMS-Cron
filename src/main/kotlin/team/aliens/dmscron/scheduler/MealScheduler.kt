@@ -31,16 +31,19 @@ class MealScheduler(
          * school table 에서 조회한 name, address 로 Neis 학교 정보를 가져오고, 가져온 학교 정보로 급식을 가져옵니다
          */
         val meals = schoolRepository.findAll().flatMap { school ->
+            val sdSchoolCode = getNeisSchoolInfo(school).sdSchoolCode
+            val regionCode = getNeisSchoolInfo(school).regionCode
+
             neisMealsService.execute(
-                sdSchoolCode = getNeisSchoolInfo(school).sdSchoolCode,
-                regionCode = getNeisSchoolInfo(school).regionCode
+                sdSchoolCode = sdSchoolCode,
+                regionCode = regionCode
             ).map { meal ->
                 MealJpaEntity(
                     id = MealJpaEntityId(
                         mealDate = meal.mealDate,
                         schoolId = school.id,
                     ),
-                    school = schoolRepository.findByIdOrNull(school.id)!!,
+                    school = school,
                     breakfast = meal.breakfast,
                     lunch = meal.lunch,
                     dinner= meal.dinner
