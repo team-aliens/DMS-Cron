@@ -68,10 +68,12 @@ class NeisMealsService(
                 element = mealCode
             )
 
+            val menuAndClaInfo = "$menu||$calInfo"
+
             when (mealCodes[i]) {
-                "1" -> breakfastMap[mealLocalDate] = "$menu||$calInfo"
-                "2" -> lunchMap[mealLocalDate] = "$menu||$calInfo"
-                "3" -> dinnerMap[mealLocalDate] = "$menu||$calInfo"
+                "1" -> breakfastMap[mealLocalDate] = menuAndClaInfo
+                "2" -> lunchMap[mealLocalDate] = menuAndClaInfo
+                "3" -> dinnerMap[mealLocalDate] = menuAndClaInfo
             }
 
             processedMealResponse.add(
