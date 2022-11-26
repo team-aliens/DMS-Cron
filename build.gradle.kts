@@ -26,6 +26,18 @@ dependencies {
     testImplementation(Dependencies.SPRING_TEST)
 }
 
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+
+noArg {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+
 tasks.compileKotlin {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")

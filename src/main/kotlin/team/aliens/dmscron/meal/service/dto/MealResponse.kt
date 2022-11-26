@@ -1,4 +1,4 @@
-package team.aliens.dmscron.meal.dto
+package team.aliens.dmscron.meal.service.dto
 
 data class MealResponse(
     val meals: List<MealElement>
