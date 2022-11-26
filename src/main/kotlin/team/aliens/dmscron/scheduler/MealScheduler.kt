@@ -1,6 +1,5 @@
 package team.aliens.dmscron.scheduler
 
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
