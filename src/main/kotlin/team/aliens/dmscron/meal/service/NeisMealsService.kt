@@ -47,12 +47,12 @@ class NeisMealsService(
 
         val mealTotalCount = mealJson.mealServiceDietInfo[0].head[0].list_total_count
 
-        val mealCodes: MutableList<String> = mutableListOf()
-        val processedMealResponse: MutableList<ProcessedMealResponse> = mutableListOf()
+        val mealCodes = mutableListOf<String>()
+        val processedMealResponse = mutableListOf<ProcessedMealResponse>()
 
-        val breakfastMap: MutableMap<LocalDate, String> = mutableMapOf()
-        val lunchMap: MutableMap<LocalDate, String> = mutableMapOf()
-        val dinnerMap: MutableMap<LocalDate, String> = mutableMapOf()
+        val breakfastMap = mutableMapOf<LocalDate, String>()
+        val lunchMap = mutableMapOf<LocalDate, String>()
+        val dinnerMap = mutableMapOf<LocalDate, String>()
 
         for (i: Int in 0 until mealTotalCount) {
             val mealCode = getMealCode(mealJson, i)
