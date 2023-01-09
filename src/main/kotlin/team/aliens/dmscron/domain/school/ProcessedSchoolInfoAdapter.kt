@@ -16,7 +16,7 @@ import team.aliens.dmscron.thirdparty.api.client.dto.NeisSchoolInfoResponse
  **/
 @Component
 class ProcessedSchoolInfoAdapter(
-    private val neisFeignClient: NeisFeignClient
+    private val neisClient: NeisFeignClient
 ) {
 
     fun execute(schoolName: String, schoolAddress: String): SchoolInfoResponse {
@@ -24,7 +24,7 @@ class ProcessedSchoolInfoAdapter(
         /**
          * HTML 형식의 JSON 을 Gson 을 사용하여 오브젝트로 변환
          **/
-        val neisSchoolInfoHtml = neisFeignClient.getSchoolInfo(
+        val neisSchoolInfoHtml = neisClient.getSchoolInfo(
             type = NeisRequestProperty.TYPE,
             pageIndex = NeisRequestProperty.PAGE_INDEX,
             pageSize = NeisRequestProperty.PAGE_SIZE,

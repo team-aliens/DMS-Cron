@@ -23,7 +23,7 @@ class ProcessedMealInfoAdapter(
     @Value("\${open-feign.neis-key}")
     private val neisKey: String,
 
-    private val neisFeignClient: NeisFeignClient
+    private val neisClient: NeisFeignClient
 ) {
 
     fun execute(sdSchoolCode: String, regionCode: String): List<MealInfoResponse> {
@@ -32,7 +32,7 @@ class ProcessedMealInfoAdapter(
         /**
          * HTML 형식의 JSON 을 Gson 을 사용하여 오브젝트로 변환
          **/
-        val mealHtml = neisFeignClient.getMealInfo(
+        val mealHtml = neisClient.getMealInfo(
             key = neisKey,
             type = NeisRequestProperty.TYPE,
             pageIndex = NeisRequestProperty.PAGE_INDEX,
