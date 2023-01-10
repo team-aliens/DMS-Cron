@@ -25,18 +25,19 @@ class MealScheduler(
     @Transactional
     @Scheduled(cron = "0 0 0 20 * *")
     fun saveMeals() {
+        val mealEntities = mutableListOf<MealJpaEntity>()
 
         /**
          * school table 에서 조회한 name, address 로 Neis 학교 정보를 가져오고, 가져온 학교 정보로 급식을 가져옵니다
          */
-        val meals = schoolRepository.findAll().flatMap { school ->
+        schoolRepository.findAll().map { school ->
             val schoolInfo = getNeisSchoolInfo(school)
 
             processedMealInfoAdapter.execute(
                 sdSchoolCode = schoolInfo.sdSchoolCode,
                 regionCode = schoolInfo.regionCode
-            ).map { meal ->
-                MealJpaEntity(
+            ).mealInfoElements.map { meal ->
+                val mealEntity = MealJpaEntity(
                     id = MealJpaEntityId(
                         mealDate = meal.mealDate,
                         schoolId = school.id,
@@ -46,10 +47,11 @@ class MealScheduler(
                     lunch = meal.lunch,
                     dinner= meal.dinner
                 )
+
+                mealEntities.add(mealEntity)
             }
         }
-
-        mealRepository.saveAll(meals)
+        mealRepository.saveAll(mealEntities)
     }
     
     private fun getNeisSchoolInfo(school: SchoolJpaEntity) =
