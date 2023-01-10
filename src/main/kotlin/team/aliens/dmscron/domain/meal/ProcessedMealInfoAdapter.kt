@@ -9,6 +9,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import org.springframework.stereotype.Component
 import team.aliens.dmscron.domain.meal.exception.MealInfoExceptions
+import team.aliens.dmscron.global.exception.GlobalExceptions
 
 /**
  *
@@ -43,7 +44,7 @@ class ProcessedMealInfoAdapter(
             startedYmd = localDateToString(nextMonth.withDayOfMonth(1).toString()),
             endedYmd = localDateToString(nextMonth.withDayOfMonth(nextMonth.lengthOfMonth()).toString())
         )
-        println(localDateToString(nextMonth.withDayOfMonth(nextMonth.lengthOfMonth()).toString()))
+
         runCatching {
             val mealJson = Gson().fromJson(mealHtml, NeisMealResponse::class.java) ?: throw MealInfoExceptions.NotFound()
 
@@ -92,7 +93,9 @@ class ProcessedMealInfoAdapter(
             return MealInfoResponse(mealInfoElements)
         }.onFailure {
             throw MealInfoExceptions.NotFound()
-        }.getOrThrow()
+        }.getOrElse {
+            throw GlobalExceptions.InternalServerError()
+        }
     }
 
     /**
