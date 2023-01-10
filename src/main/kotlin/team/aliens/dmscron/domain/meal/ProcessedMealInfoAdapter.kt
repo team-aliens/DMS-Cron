@@ -8,6 +8,7 @@ import team.aliens.dmscron.thirdparty.api.client.dto.NeisMealResponse
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import org.springframework.stereotype.Component
+import team.aliens.dmscron.domain.meal.exception.MealInfoExceptions
 
 /**
  *
@@ -26,7 +27,7 @@ class ProcessedMealInfoAdapter(
     private val neisClient: NeisFeignClient
 ) {
 
-    fun execute(sdSchoolCode: String, regionCode: String): List<MealInfoResponse> {
+    fun execute(sdSchoolCode: String, regionCode: String): MealInfoResponse {
         val nextMonth = LocalDate.now().plusMonths(1)
 
         /**
@@ -40,53 +41,58 @@ class ProcessedMealInfoAdapter(
             sdSchoolCode = sdSchoolCode,
             regionCode = regionCode,
             startedYmd = localDateToString(nextMonth.withDayOfMonth(1).toString()),
-            endedYmd = localDateToString(nextMonth.withDayOfMonth(LocalDate.now().lengthOfMonth()).toString())
+            endedYmd = localDateToString(nextMonth.withDayOfMonth(nextMonth.lengthOfMonth()).toString())
         )
-        val mealJson = Gson().fromJson(mealHtml, NeisMealResponse::class.java)
+        println(localDateToString(nextMonth.withDayOfMonth(nextMonth.lengthOfMonth()).toString()))
+        runCatching {
+            val mealJson = Gson().fromJson(mealHtml, NeisMealResponse::class.java) ?: throw MealInfoExceptions.NotFound()
 
-        val mealTotalCount = mealJson.mealServiceDietInfo[0].head[0].list_total_count
+            val mealTotalCount = mealJson.mealServiceDietInfo[0].head[0].list_total_count
 
-        val mealCodes = mutableListOf<String>()
-        val mealInfoResponse = mutableListOf<MealInfoResponse>()
+            val mealCodes = mutableListOf<String>()
+            val mealInfoElements = mutableListOf<MealInfoResponse.MealInfoElement>()
 
-        val breakfastMap = mutableMapOf<LocalDate, String>()
-        val lunchMap = mutableMapOf<LocalDate, String>()
-        val dinnerMap = mutableMapOf<LocalDate, String>()
+            val breakfastMap = mutableMapOf<LocalDate, String>()
+            val lunchMap = mutableMapOf<LocalDate, String>()
+            val dinnerMap = mutableMapOf<LocalDate, String>()
 
-        for (i: Int in 0 until mealTotalCount) {
-            val mealCode = getMealCode(mealJson, i)
-            val calInfo = getCalInfo(mealJson, i)
-            val menu = getMenuReplace(mealJson, i)
-            val mealDate = getMealDate(mealJson, i)
+            for (i: Int in 0 until mealTotalCount) {
+                val mealCode = getMealCode(mealJson, i)
+                val calInfo = getCalInfo(mealJson, i)
+                val menu = getMenuReplace(mealJson, i)
+                val mealDate = getMealDate(mealJson, i)
 
-            val transferMealDate = transferMealDate(mealDate)
-            val mealLocalDate = stringToLocalDate(transferMealDate)
+                val transferMealDate = transferMealDate(mealDate)
+                val mealLocalDate = stringToLocalDate(transferMealDate)
 
-            mealCodes.add(
-                index = i,
-                element = mealCode
-            )
+                mealCodes.add(
+                    index = i,
+                    element = mealCode
+                )
 
-            val menuAndClaInfo = "$menu||$calInfo"
+                val menuAndClaInfo = "$menu||$calInfo"
 
-            when (mealCodes[i]) {
-                "1" -> breakfastMap[mealLocalDate] = menuAndClaInfo
-                "2" -> lunchMap[mealLocalDate] = menuAndClaInfo
-                "3" -> dinnerMap[mealLocalDate] = menuAndClaInfo
+                when (mealCodes[i]) {
+                    "1" -> breakfastMap[mealLocalDate] = menuAndClaInfo
+                    "2" -> lunchMap[mealLocalDate] = menuAndClaInfo
+                    "3" -> dinnerMap[mealLocalDate] = menuAndClaInfo
+                }
+
+                mealInfoElements.add(
+                    index = i,
+                    element = MealInfoResponse.MealInfoElement(
+                        mealDate = mealLocalDate,
+                        breakfast = breakfastMap[mealLocalDate].orEmpty(),
+                        lunch = lunchMap[mealLocalDate].orEmpty(),
+                        dinner = dinnerMap[mealLocalDate].orEmpty()
+                    )
+                )
             }
 
-            mealInfoResponse.add(
-                index = i,
-                element = MealInfoResponse(
-                    mealDate = mealLocalDate,
-                    breakfast = breakfastMap[mealLocalDate].orEmpty(),
-                    lunch = lunchMap[mealLocalDate].orEmpty(),
-                    dinner = dinnerMap[mealLocalDate].orEmpty()
-                )
-            )
-        }
-
-        return mealInfoResponse
+            return MealInfoResponse(mealInfoElements)
+        }.onFailure {
+            throw MealInfoExceptions.NotFound()
+        }.getOrThrow()
     }
 
     /**
