@@ -1,4 +1,4 @@
-package team.aliens.dmscron.meal.repository
+package team.aliens.dmscron.domain.meal.persistence.repository
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository

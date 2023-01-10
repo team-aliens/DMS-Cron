@@ -1,16 +1,16 @@
 package team.aliens.dmscron.global.error
 
-import org.springframework.http.HttpStatus
+import team.aliens.dmscron.global.exception.DmsCronException
 
 data class ErrorResponse(
-    val status: HttpStatus,
+    val status: Int,
     val message: String
 ) {
 
     companion object {
-        fun of(errorProperty: ErrorProperty) = ErrorResponse(
-            status = errorProperty.status(),
-            message = errorProperty.message()
+        fun of(exception: DmsCronException) = ErrorResponse(
+            status = exception.status,
+            message = exception.message
         )
     }
 }

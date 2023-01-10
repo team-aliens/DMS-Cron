@@ -5,18 +5,18 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import team.aliens.dmscron.meal.entity.MealJpaEntity
 import team.aliens.dmscron.meal.entity.MealJpaEntityId
-import team.aliens.dmscron.meal.repository.MealJpaRepository
-import team.aliens.dmscron.meal.service.NeisMealsService
-import team.aliens.dmscron.school.entity.SchoolJpaEntity
-import team.aliens.dmscron.school.repository.SchoolJpaRepository
-import team.aliens.dmscron.school.service.NeisSchoolInfoService
+import team.aliens.dmscron.domain.meal.persistence.repository.MealJpaRepository
+import team.aliens.dmscron.domain.meal.ProcessedMealInfoAdapter
+import team.aliens.dmscron.domain.school.persistence.entity.SchoolJpaEntity
+import team.aliens.dmscron.domain.school.persistence.repository.SchoolJpaRepository
+import team.aliens.dmscron.domain.school.ProcessedSchoolInfoAdapter
 
 @Component
 class MealScheduler(
     private val mealRepository: MealJpaRepository,
     private val schoolRepository: SchoolJpaRepository,
-    private val neisMealsService: NeisMealsService,
-    private val neisSchoolInfoService: NeisSchoolInfoService
+    private val processedMealInfoAdapter: ProcessedMealInfoAdapter,
+    private val processedSchoolInfoAdapter: ProcessedSchoolInfoAdapter
 ) {
 
     /**
@@ -32,7 +32,7 @@ class MealScheduler(
         val meals = schoolRepository.findAll().flatMap { school ->
             val schoolInfo = getNeisSchoolInfo(school)
 
-            neisMealsService.execute(
+            processedMealInfoAdapter.execute(
                 sdSchoolCode = schoolInfo.sdSchoolCode,
                 regionCode = schoolInfo.regionCode
             ).map { meal ->
@@ -53,5 +53,5 @@ class MealScheduler(
     }
     
     private fun getNeisSchoolInfo(school: SchoolJpaEntity) =
-        neisSchoolInfoService.execute(schoolName = school.name, schoolAddress = school.address)
+        processedSchoolInfoAdapter.execute(schoolName = school.name, schoolAddress = school.address)
 }

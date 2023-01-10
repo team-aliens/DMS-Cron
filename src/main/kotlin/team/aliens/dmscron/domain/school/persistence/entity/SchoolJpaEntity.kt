@@ -1,4 +1,4 @@
-package team.aliens.dmscron.school.entity
+package team.aliens.dmscron.domain.school.persistence.entity
 
 import java.time.LocalDate
 import java.util.UUID

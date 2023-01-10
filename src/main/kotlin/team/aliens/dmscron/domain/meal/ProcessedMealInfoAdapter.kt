@@ -1,14 +1,13 @@
-package team.aliens.dmscron.meal.service
+package team.aliens.dmscron.domain.meal
 
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Service
-import team.aliens.dmscron.meal.service.dto.ProcessedMealResponse
 import team.aliens.dmscron.thirdparty.api.client.properties.NeisRequestProperty
-import team.aliens.dmscron.thirdparty.api.client.NeisMeal
+import team.aliens.dmscron.thirdparty.api.client.NeisFeignClient
 import team.aliens.dmscron.thirdparty.api.client.dto.NeisMealResponse
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import org.springframework.stereotype.Component
 
 /**
  *
@@ -18,22 +17,22 @@ import java.time.format.DateTimeFormatter
  * @date 2022/11/07
  * @version 1.0.0
  **/
-@Service
-class NeisMealsService(
+@Component
+class ProcessedMealInfoAdapter(
 
     @Value("\${open-feign.neis-key}")
     private val neisKey: String,
 
-    private val neisMeal: NeisMeal
+    private val neisClient: NeisFeignClient
 ) {
 
-    fun execute(sdSchoolCode: String, regionCode: String): List<ProcessedMealResponse> {
+    fun execute(sdSchoolCode: String, regionCode: String): List<MealInfoResponse> {
         val nextMonth = LocalDate.now().plusMonths(1)
 
         /**
          * HTML 형식의 JSON 을 Gson 을 사용하여 오브젝트로 변환
          **/
-        val mealHtml = neisMeal.getNeisMeal(
+        val mealHtml = neisClient.getMealInfo(
             key = neisKey,
             type = NeisRequestProperty.TYPE,
             pageIndex = NeisRequestProperty.PAGE_INDEX,
@@ -48,7 +47,7 @@ class NeisMealsService(
         val mealTotalCount = mealJson.mealServiceDietInfo[0].head[0].list_total_count
 
         val mealCodes = mutableListOf<String>()
-        val processedMealResponse = mutableListOf<ProcessedMealResponse>()
+        val mealInfoResponse = mutableListOf<MealInfoResponse>()
 
         val breakfastMap = mutableMapOf<LocalDate, String>()
         val lunchMap = mutableMapOf<LocalDate, String>()
@@ -76,9 +75,9 @@ class NeisMealsService(
                 "3" -> dinnerMap[mealLocalDate] = menuAndClaInfo
             }
 
-            processedMealResponse.add(
+            mealInfoResponse.add(
                 index = i,
-                element = ProcessedMealResponse(
+                element = MealInfoResponse(
                     mealDate = mealLocalDate,
                     breakfast = breakfastMap[mealLocalDate].orEmpty(),
                     lunch = lunchMap[mealLocalDate].orEmpty(),
@@ -87,7 +86,7 @@ class NeisMealsService(
             )
         }
 
-        return processedMealResponse
+        return mealInfoResponse
     }
 
     /**

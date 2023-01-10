@@ -1,10 +1,9 @@
-package team.aliens.dmscron.school.service
+package team.aliens.dmscron.domain.school
 
 import com.google.gson.Gson
-import org.springframework.stereotype.Service
-import team.aliens.dmscron.school.service.dto.ProcessedNeisSchoolInfoResponse
+import org.springframework.stereotype.Component
+import team.aliens.dmscron.thirdparty.api.client.NeisFeignClient
 import team.aliens.dmscron.thirdparty.api.client.properties.NeisRequestProperty
-import team.aliens.dmscron.thirdparty.api.client.NeisSchoolInfo
 import team.aliens.dmscron.thirdparty.api.client.dto.NeisSchoolInfoResponse
 
 /**
@@ -15,17 +14,17 @@ import team.aliens.dmscron.thirdparty.api.client.dto.NeisSchoolInfoResponse
  * @date 2022/11/21
  * @version 1.0.0
  **/
-@Service
-class NeisSchoolInfoService(
-    private val neisSchoolInfo: NeisSchoolInfo
+@Component
+class ProcessedSchoolInfoAdapter(
+    private val neisClient: NeisFeignClient
 ) {
 
-    fun execute(schoolName: String, schoolAddress: String): ProcessedNeisSchoolInfoResponse {
+    fun execute(schoolName: String, schoolAddress: String): SchoolInfoResponse {
 
         /**
          * HTML 형식의 JSON 을 Gson 을 사용하여 오브젝트로 변환
          **/
-        val neisSchoolInfoHtml = neisSchoolInfo.getNeisSchoolInfo(
+        val neisSchoolInfoHtml = neisClient.getSchoolInfo(
             type = NeisRequestProperty.TYPE,
             pageIndex = NeisRequestProperty.PAGE_INDEX,
             pageSize = NeisRequestProperty.PAGE_SIZE,
@@ -34,7 +33,7 @@ class NeisSchoolInfoService(
         )
         val neisSchoolInfoResponse = Gson().fromJson(neisSchoolInfoHtml, NeisSchoolInfoResponse::class.java)
 
-        return ProcessedNeisSchoolInfoResponse(
+        return SchoolInfoResponse(
             sdSchoolCode = neisSchoolInfoResponse.schoolInfo[1].row[0].SD_SCHUL_CODE,
             regionCode = neisSchoolInfoResponse.schoolInfo[1].row[0].ATPT_OFCDC_SC_CODE
         )

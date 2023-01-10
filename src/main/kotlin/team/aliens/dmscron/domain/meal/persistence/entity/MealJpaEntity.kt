@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.MapsId
 import javax.persistence.Table
-import team.aliens.dmscron.school.entity.SchoolJpaEntity
+import team.aliens.dmscron.domain.school.persistence.entity.SchoolJpaEntity
 
 @Entity
 @Table(name = "tbl_meal")
