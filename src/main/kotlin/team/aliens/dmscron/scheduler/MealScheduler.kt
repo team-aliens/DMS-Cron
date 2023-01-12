@@ -3,13 +3,13 @@ package team.aliens.dmscron.scheduler
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import team.aliens.dmscron.meal.entity.MealJpaEntity
-import team.aliens.dmscron.meal.entity.MealJpaEntityId
-import team.aliens.dmscron.domain.meal.persistence.repository.MealJpaRepository
 import team.aliens.dmscron.domain.meal.ProcessedMealInfoAdapter
+import team.aliens.dmscron.domain.meal.persistence.repository.MealJpaRepository
+import team.aliens.dmscron.domain.school.ProcessedSchoolInfoAdapter
 import team.aliens.dmscron.domain.school.persistence.entity.SchoolJpaEntity
 import team.aliens.dmscron.domain.school.persistence.repository.SchoolJpaRepository
-import team.aliens.dmscron.domain.school.ProcessedSchoolInfoAdapter
+import team.aliens.dmscron.meal.entity.MealJpaEntity
+import team.aliens.dmscron.meal.entity.MealJpaEntityId
 
 @Component
 class MealScheduler(
