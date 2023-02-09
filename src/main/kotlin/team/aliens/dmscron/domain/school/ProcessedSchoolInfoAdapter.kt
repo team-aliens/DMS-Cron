@@ -2,6 +2,8 @@ package team.aliens.dmscron.domain.school
 
 import com.google.gson.Gson
 import org.springframework.stereotype.Component
+import team.aliens.dmscron.domain.school.exception.SchoolInfoExceptions
+import team.aliens.dmscron.global.exception.GlobalExceptions
 import team.aliens.dmscron.thirdparty.api.client.NeisFeignClient
 import team.aliens.dmscron.thirdparty.api.client.properties.NeisRequestProperty
 import team.aliens.dmscron.thirdparty.api.client.dto.NeisSchoolInfoResponse
@@ -31,11 +33,18 @@ class ProcessedSchoolInfoAdapter(
             schoolName = schoolName,
             schoolAddress = schoolAddress
         )
-        val neisSchoolInfoResponse = Gson().fromJson(neisSchoolInfoHtml, NeisSchoolInfoResponse::class.java)
 
-        return SchoolInfoResponse(
-            sdSchoolCode = neisSchoolInfoResponse.schoolInfo[1].row[0].SD_SCHUL_CODE,
-            regionCode = neisSchoolInfoResponse.schoolInfo[1].row[0].ATPT_OFCDC_SC_CODE
-        )
+        runCatching {
+            val neisSchoolInfoResponse = Gson().fromJson(neisSchoolInfoHtml, NeisSchoolInfoResponse::class.java)
+
+            return SchoolInfoResponse(
+                sdSchoolCode = neisSchoolInfoResponse.schoolInfo[1].row[0].SD_SCHUL_CODE,
+                regionCode = neisSchoolInfoResponse.schoolInfo[1].row[0].ATPT_OFCDC_SC_CODE
+            )
+        }.onFailure {
+            throw SchoolInfoExceptions.NotFound()
+        }.getOrElse {
+            throw GlobalExceptions.InternalServerError()
+        }
     }
 }
